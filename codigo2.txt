@@ -1,0 +1,74 @@
+//utiliando dos hilos
+import java.util.Random;
+
+public class BusquedaConHilos {
+    private static int[] vector; // Vector de números aleatorios
+    private static int x1; // Variable para almacenar el resultado del hilo 1
+    private static int x2; // Variable para almacenar el resultado del hilo 2
+
+    public static void main(String[] args) {
+        // Crear vector con 1000 números aleatorios
+        vector = generarVector(1000);
+
+        // Iniciar medición de tiempo
+        long startTime = System.currentTimeMillis();
+
+        // Crear y ejecutar los hilos
+        Thread hilo1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                x1 = buscarMayor(0, vector.length / 2);
+            }
+        });
+
+        Thread hilo2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                x2 = buscarMayor(vector.length / 2, vector.length);
+            }
+        });
+
+        hilo1.start();
+        hilo2.start();
+
+        // Esperar a que los hilos terminen
+        try {
+            hilo1.join();
+            hilo2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Encontrar el número mayor entre los resultados de los hilos
+        int mayor = Math.max(x1, x2);
+
+        // Finalizar medición de tiempo
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+
+        // Imprimir resultado y tiempo de ejecución
+        System.out.println("El número mayor es: " + mayor);
+        System.out.println("Tiempo de búsqueda (ms): " + totalTime);
+    }
+
+    // Generar un vector con números aleatorios
+    public static int[] generarVector(int size) {
+        int[] vector = new int[size];
+        Random random = new Random();
+        for (int i = 0; i < size; i++) {
+            vector[i] = random.nextInt(1000); // Números entre 0 y 999
+        }
+        return vector;
+    }
+
+    // Buscar el número mayor en una sección del vector
+    public static int buscarMayor(int inicio, int fin) {
+        int mayor = Integer.MIN_VALUE;
+        for (int i = inicio; i < fin; i++) {
+            if (vector[i] > mayor) {
+                mayor = vector[i];
+            }
+        }
+        return mayor;
+    }
+}

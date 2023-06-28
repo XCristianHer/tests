@@ -1,0 +1,45 @@
+//100 numero aleatorios
+import java.util.Random;
+
+public class BusquedaSinHilos {
+    public static void main(String[] args) {
+        // Crear vector con 1000 números aleatorios
+        int[] vector = generarVector(1000);
+        
+        // Iniciar medición de tiempo
+        long startTime = System.currentTimeMillis();
+        
+        // Buscar número mayor
+        int mayor = buscarMayor(vector);
+        
+        // Finalizar medición de tiempo
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        
+        // Imprimir resultado y tiempo de ejecución
+        System.out.println("El número mayor es: " + mayor);
+        System.out.println("Tiempo de búsqueda (ms): " + totalTime);
+    }
+    
+    // Generar un vector con números aleatorios
+    public static int[] generarVector(int size) {
+        int[] vector = new int[size];
+        Random random = new Random();
+        for (int i = 0; i < size; i++) {
+            vector[i] = random.nextInt(1000); // Números entre 0 y 999
+        }
+        return vector;
+    }
+    
+    // Buscar el número mayor en un vector
+    public static int buscarMayor(int[] vector) {
+        int mayor = Integer.MIN_VALUE;
+        for (int num : vector) {
+            if (num > mayor) {
+                mayor = num;
+            }
+        }
+        return mayor;
+    }
+}
+
